@@ -19,12 +19,60 @@ export async function login(formData: FormData) {
     const validUsername = process.env.ADMIN_USERNAME;
     const validHash = process.env.ADMIN_PASSWORD_HASH;
 
+    // Rate Limiting Logic via IP
+    const { headers } = await import('next/headers');
+    const fs = await import('fs');
+    const path = await import('path');
+
+    const clientHeader = await headers();
+    const ip = clientHeader.get('x-forwarded-for')?.split(',')[0] || '127.0.0.1';
+
+    const attemptsFilePath = path.join(process.cwd(), 'src', 'data', 'login_attempts.json');
+
+    let attemptsData: Record<string, { count: number; lastAttempt: number }> = {};
+    try {
+        if (fs.existsSync(attemptsFilePath)) {
+            const content = fs.readFileSync(attemptsFilePath, 'utf8');
+            attemptsData = JSON.parse(content || '{}');
+        }
+    } catch { /* ignore */ }
+
+    const userAttempts = attemptsData[ip] || { count: 0, lastAttempt: 0 };
+    const now = Date.now();
+    const LOCK_TIME = 2.5 * 60 * 1000; // 2.5 minutes
+    const MAX_ATTEMPTS = 5;
+
+    // Check if locked
+    if (userAttempts.count >= MAX_ATTEMPTS && (now - userAttempts.lastAttempt) < LOCK_TIME) {
+        // RENEWABLE LOCKOUT: Reset the timer on every attempt while locked
+        userAttempts.lastAttempt = now;
+        attemptsData[ip] = userAttempts;
+        try { fs.writeFileSync(attemptsFilePath, JSON.stringify(attemptsData, null, 2)); } catch { }
+
+        return { success: false, message: 'Login nicht erfolgreich.' };
+    }
+
+    // Success check
     if (username === validUsername && hashPassword(password) === validHash) {
+        // Reset attempts for this IP on success
+        delete attemptsData[ip];
+        try { fs.writeFileSync(attemptsFilePath, JSON.stringify(attemptsData, null, 2)); } catch { }
+
         await createSession(username);
         return { success: true };
     }
 
-    return { success: false, message: 'Ungültige Anmeldedaten.' };
+    // Failure: Record attempt for this IP
+    // If they were locked but time passed, reset to 1. Otherwise increment.
+    userAttempts.count = (userAttempts.count >= MAX_ATTEMPTS && (now - userAttempts.lastAttempt) >= LOCK_TIME)
+        ? 1
+        : userAttempts.count + 1;
+    userAttempts.lastAttempt = now;
+    attemptsData[ip] = userAttempts;
+
+    try { fs.writeFileSync(attemptsFilePath, JSON.stringify(attemptsData, null, 2)); } catch { }
+
+    return { success: false, message: 'Login nicht erfolgreich.' };
 }
 
 export async function logout() {

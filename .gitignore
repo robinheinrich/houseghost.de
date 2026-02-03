@@ -42,3 +42,4 @@ next-env.d.ts
 
 # data & privacy
 src/data/contacts.json
+src/data/login_attempts.json
