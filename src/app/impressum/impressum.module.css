@@ -1,0 +1,47 @@
+.header {
+    padding: 6rem 0 2rem;
+    background: var(--primary-dark);
+    color: white;
+    text-align: center;
+}
+
+.content {
+    max-width: 800px;
+    margin: 0 auto 6rem;
+    padding: 4rem;
+    border-radius: 40px;
+}
+
+.section {
+    margin-bottom: 3rem;
+}
+
+.section h2 {
+    color: var(--accent-orange);
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 0.5rem;
+}
+
+.section h3 {
+    margin: 1.5rem 0 1rem;
+}
+
+.section p {
+    margin-bottom: 1rem;
+    line-height: 1.8;
+}
+
+.note {
+    font-style: italic;
+    opacity: 0.6;
+    margin-top: 4rem;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .content {
+        padding: 2rem;
+        margin: -1rem 1rem 4rem;
+    }
+}

@@ -1,0 +1,81 @@
+.loginContainer {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: radial-gradient(circle at top right, var(--secondary-dark), var(--primary-dark));
+}
+
+.loginCard {
+    width: 100%;
+    max-width: 400px;
+    padding: 3rem;
+    border-radius: 40px;
+    text-align: center;
+}
+
+.title {
+    margin-bottom: 2rem;
+    color: var(--accent-orange);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.formGroup {
+    text-align: left;
+}
+
+.label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.input {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--accent-orange);
+}
+
+.error {
+    color: #ff416c;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+}
+
+.btnLogin {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+    color: var(--primary-dark);
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btnLogin:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(140, 205, 228, 0.4);
+}
+
+.btnLogin:active {
+    transform: translateY(0);
+}

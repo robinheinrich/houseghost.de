@@ -1,0 +1,119 @@
+.carouselContainer {
+    margin: 6rem 0;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary-dark);
+}
+
+.carousel {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 30px;
+    padding-bottom: 2.5rem;
+}
+
+.track {
+    display: flex;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide {
+    min-width: 100%;
+    aspect-ratio: 21 / 9;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.imageWrapper {
+    flex: 1;
+    position: relative;
+    padding: 3rem;
+}
+
+.image {
+    object-fit: contain !important;
+    padding: 0;
+    border-radius: 0;
+}
+
+.caption {
+    padding: 1.5rem;
+    text-align: center;
+    background: var(--glass-bg);
+    font-weight: 600;
+}
+
+.navBtn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--glass-bg);
+    backdrop-filter: blur(5px);
+    border: 1px solid var(--glass-border);
+    color: var(--foreground);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.navBtn:hover {
+    background: var(--accent-orange);
+    color: white;
+}
+
+.prev {
+    left: 1.5rem;
+}
+
+.next {
+    right: 1.5rem;
+}
+
+.dots {
+    position: absolute;
+    bottom: 0.8rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.activeDot {
+    background: var(--accent-orange);
+    transform: scale(1.3);
+}
+
+@media (max-width: 768px) {
+    .slide {
+        aspect-ratio: 4 / 3;
+    }
+
+    .navBtn {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+}

@@ -1,0 +1,145 @@
+.adminContainer {
+    padding: 8rem 2rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.actionBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+}
+
+.btnDelete {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #ff4b2b, #ff416c);
+    color: white;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
+    cursor: pointer;
+    border: none;
+}
+
+.btnDelete:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.5;
+    transform: none;
+    box-shadow: none;
+}
+
+.btnDelete:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
+}
+
+.btnExport {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+    color: var(--primary-dark);
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btnExport:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(140, 205, 228, 0.4);
+}
+
+.btnLogout {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
+    color: white;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btnLogout:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.tableWrapper {
+    overflow-x: auto;
+    padding: 2rem;
+    border-radius: 30px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.table th,
+.table td {
+    padding: 1.2rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--accent-orange);
+}
+
+.table th {
+    color: var(--accent-orange);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+}
+
+.table tr:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.messageCell {
+    max-width: 400px;
+    white-space: pre-wrap;
+    font-size: 0.9rem;
+}
+
+.timestamp {
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+.errorBox {
+    padding: 4rem;
+    text-align: center;
+    border-radius: 30px;
+    color: #721c24;
+}
+
+@media (max-width: 768px) {
+    .adminContainer {
+        padding: 6rem 1rem 4rem;
+    }
+
+    .table th,
+    .table td {
+        padding: 0.8rem;
+        font-size: 0.85rem;
+    }
+}
