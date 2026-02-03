@@ -19,8 +19,6 @@ export async function login(formData: FormData) {
     const validUsername = process.env.ADMIN_USERNAME;
     const validHash = process.env.ADMIN_PASSWORD_HASH;
 
-    console.log('Login attempt:', { username, providedHash: hashPassword(password), expectedUsername: validUsername, expectedHashLength: validHash?.length });
-
     if (username === validUsername && hashPassword(password) === validHash) {
         await createSession(username);
         return { success: true };
