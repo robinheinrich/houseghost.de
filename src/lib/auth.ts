@@ -73,10 +73,13 @@ export async function createSession(username: string) {
 
     const token = encrypt(sessionData);
 
+    const isProd = process.env.NODE_ENV === 'production';
+    console.log(`Creating session for: ${username}, secure: ${isProd}`);
+
     const cookieStore = await cookies();
     cookieStore.set(AUTH_COOKIE_NAME, token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: isProd,
         sameSite: 'lax',
         expires: expiresAt,
         path: '/',
@@ -86,18 +89,27 @@ export async function createSession(username: string) {
 export async function getSession() {
     const cookieStore = await cookies();
     const session = cookieStore.get(AUTH_COOKIE_NAME);
-    if (!session) return null;
+
+    if (!session) {
+        console.log('getSession: No session cookie found');
+        return null;
+    }
 
     const decrypted = decrypt(session.value);
-    if (!decrypted) return null;
+    if (!decrypted) {
+        console.log('getSession: Decryption failed or empty');
+        return null;
+    }
 
     try {
         const data = JSON.parse(decrypted);
         if (new Date(data.expiresAt) < new Date()) {
+            console.log('getSession: Session expired');
             return null;
         }
         return data;
-    } catch {
+    } catch (e) {
+        console.log('getSession: JSON parse failed', e);
         return null;
     }
 }
