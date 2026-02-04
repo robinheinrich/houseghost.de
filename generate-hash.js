@@ -14,4 +14,4 @@ console.log('\n--- Bcrypt Hash Generator ---');
 console.log('Password:', password);
 console.log('Hash:    ', hash);
 console.log('-----------------------------\n');
-console.log('Copy this hash to your .env.local as ADMIN_PASSWORD_HASH');
+console.log('Copy this hash to your .env.local or ecosystem.config.js as ADMIN_PASSWORD_HASH');

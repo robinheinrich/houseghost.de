@@ -13,20 +13,6 @@ function getSecretKey() {
     return crypto.createHash('sha256').update(secret).digest();
 }
 
-export function hashPassword(password: string) {
-    const salt = bcrypt.genSaltSync(12);
-    return bcrypt.hashSync(password, salt);
-}
-
-export function verifyPassword(password: string, hash: string) {
-    try {
-        return bcrypt.compareSync(password, hash);
-    } catch (error) {
-        console.error('Password verification failed:', error);
-        return false;
-    }
-}
-
 /**
  * Encrypts session data into a secure string
  */
@@ -67,6 +53,15 @@ function decrypt(ciphertext: string) {
     }
 }
 
+export function verifyPassword(password: string, hash: string) {
+    try {
+        return bcrypt.compareSync(password, hash);
+    } catch (error) {
+        console.error('Password verification failed:', error);
+        return false;
+    }
+}
+
 export async function createSession(username: string) {
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
     const sessionData = JSON.stringify({ username, expiresAt: expiresAt.toISOString() });
@@ -75,9 +70,7 @@ export async function createSession(username: string) {
 
     const isProd = process.env.NODE_ENV === 'production';
     // If you use http:// instead of https://, 'secure: true' prevents the cookie from being saved.
-    // We disable it here unless explicitly turned on.
     const isSecure = isProd && process.env.AUTH_SECURE_COOKIES === 'true';
-    console.log(`Creating session for: ${username}, secure: ${isSecure}`);
 
     const cookieStore = await cookies();
     cookieStore.set(AUTH_COOKIE_NAME, token, {
@@ -93,26 +86,18 @@ export async function getSession() {
     const cookieStore = await cookies();
     const session = cookieStore.get(AUTH_COOKIE_NAME);
 
-    if (!session) {
-        console.log('getSession: No session cookie found');
-        return null;
-    }
+    if (!session) return null;
 
     const decrypted = decrypt(session.value);
-    if (!decrypted) {
-        console.log('getSession: Decryption failed or empty');
-        return null;
-    }
+    if (!decrypted) return null;
 
     try {
         const data = JSON.parse(decrypted);
         if (new Date(data.expiresAt) < new Date()) {
-            console.log('getSession: Session expired');
             return null;
         }
         return data;
-    } catch (e) {
-        console.log('getSession: JSON parse failed', e);
+    } catch {
         return null;
     }
 }
