@@ -74,12 +74,15 @@ export async function createSession(username: string) {
     const token = encrypt(sessionData);
 
     const isProd = process.env.NODE_ENV === 'production';
-    console.log(`Creating session for: ${username}, secure: ${isProd}`);
+    // If you use http:// instead of https://, 'secure: true' prevents the cookie from being saved.
+    // We disable it here unless explicitly turned on.
+    const isSecure = isProd && process.env.AUTH_SECURE_COOKIES === 'true';
+    console.log(`Creating session for: ${username}, secure: ${isSecure}`);
 
     const cookieStore = await cookies();
     cookieStore.set(AUTH_COOKIE_NAME, token, {
         httpOnly: true,
-        secure: isProd,
+        secure: isSecure,
         sameSite: 'lax',
         expires: expiresAt,
         path: '/',

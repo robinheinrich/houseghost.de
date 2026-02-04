@@ -64,7 +64,6 @@ export async function login(formData: FormData) {
 
     // Success check
     const isUserValid = username === validUsername;
-    const isHashValid = !!validHash;
     const isPasswordCorrect = (validHash && isUserValid) ? verifyPassword(password, validHash) : false;
 
     console.log('Comparison Detail:');
