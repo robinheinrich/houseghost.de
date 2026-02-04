@@ -14,10 +14,10 @@ interface Contact {
 
 export async function login(formData: FormData) {
     const username = (formData.get('username') as string || '').trim();
-    const password = (formData.get('password') as string || '').trim();
+    const password = formData.get('password') as string || '';
 
-    const validUsername = process.env.ADMIN_USERNAME;
-    const validHash = process.env.ADMIN_PASSWORD_HASH;
+    const validUsername = process.env.ADMIN_USERNAME?.trim();
+    const validHash = process.env.ADMIN_PASSWORD_HASH?.trim();
 
     console.log('--- Login Attempt Debug ---');
     console.log('Username provided:', username);
