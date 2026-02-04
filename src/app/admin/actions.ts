@@ -63,8 +63,19 @@ export async function login(formData: FormData) {
     }
 
     // Success check
-    if (username === validUsername && validHash && verifyPassword(password, validHash)) {
-        console.log('Login successful for user:', username);
+    const isUserValid = username === validUsername;
+    const isHashValid = !!validHash;
+    const isPasswordCorrect = (validHash && isUserValid) ? verifyPassword(password, validHash) : false;
+
+    console.log('Comparison Detail:');
+    console.log('- Username provided:', `"${username}"`);
+    console.log('- Username expected:', `"${validUsername}"`);
+    console.log('- User matches:', isUserValid);
+    console.log('- Password length provided:', password.length);
+    console.log('- Password matches hash:', isPasswordCorrect);
+
+    if (isUserValid && isPasswordCorrect) {
+        console.log('Login success!');
         // Reset attempts for this IP on success
         delete attemptsData[ip];
         try { fs.writeFileSync(attemptsFilePath, JSON.stringify(attemptsData, null, 2)); } catch { }
@@ -73,7 +84,7 @@ export async function login(formData: FormData) {
         return { success: true };
     }
 
-    console.log('Login failed: Password mismatch or invalid user');
+    console.log('Login failed: Final check was false');
     // Failure: Record attempt for this IP
     // If they were locked but time passed, reset to 1. Otherwise increment.
     userAttempts.count = (userAttempts.count >= MAX_ATTEMPTS && (now - userAttempts.lastAttempt) >= LOCK_TIME)
