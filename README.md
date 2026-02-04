@@ -35,13 +35,12 @@ The project includes a secure Admin Dashboard at `/admin` to manage contact form
 ### Configuration (.env.local)
 To change the credentials, update the following values in your `.env.local`:
 - `ADMIN_USERNAME`: Your desired username.
-- `ADMIN_PASSWORD_HASH`: The SHA-256 hash of your new password.
+- `ADMIN_PASSWORD_HASH`: The hash of your new password.
 
-**How to generate a new password hash:**
-Run the following command in your terminal to generate a hash for your new password (replace `YourNewPassword`):
-```bash
-node -e "console.log(require('crypto').createHash('sha256').update('YourNewPassword').digest('hex'))"
-```
+### How to update your password
+- Open a terminal in your project directory.
+- Run the generator script with your desired password:
+- node generate-hash.js "DEIN_PASSWORT"
 
 ### Deployment Note
 When deploying (e.g., to Vercel), ensure you set the following **Environment Variables** in your hosting provider's dashboard:

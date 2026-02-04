@@ -13,11 +13,20 @@ interface Contact {
 }
 
 export async function login(formData: FormData) {
-    const username = formData.get('username') as string;
-    const password = formData.get('password') as string;
+    const username = (formData.get('username') as string || '').trim();
+    const password = (formData.get('password') as string || '').trim();
 
     const validUsername = process.env.ADMIN_USERNAME;
     const validHash = process.env.ADMIN_PASSWORD_HASH;
+
+    console.log('--- Login Attempt Debug ---');
+    console.log('Username provided:', username);
+    console.log('Username expected:', validUsername ? 'SET' : 'NOT SET');
+    if (validHash) {
+        console.log(`Hash expected: SET (Length: ${validHash.length}, Starts with: ${validHash.substring(0, 7)}, Ends with: ${validHash.substring(validHash.length - 3)})`);
+    } else {
+        console.log('Hash expected: NOT SET');
+    }
 
     // Rate Limiting Logic via IP
     const { headers } = await import('next/headers');
@@ -44,6 +53,7 @@ export async function login(formData: FormData) {
 
     // Check if locked
     if (userAttempts.count >= MAX_ATTEMPTS && (now - userAttempts.lastAttempt) < LOCK_TIME) {
+        console.log('Login attempt blocked: IP locked', ip);
         // RENEWABLE LOCKOUT: Reset the timer on every attempt while locked
         userAttempts.lastAttempt = now;
         attemptsData[ip] = userAttempts;
@@ -54,6 +64,7 @@ export async function login(formData: FormData) {
 
     // Success check
     if (username === validUsername && validHash && verifyPassword(password, validHash)) {
+        console.log('Login successful for user:', username);
         // Reset attempts for this IP on success
         delete attemptsData[ip];
         try { fs.writeFileSync(attemptsFilePath, JSON.stringify(attemptsData, null, 2)); } catch { }
@@ -62,6 +73,7 @@ export async function login(formData: FormData) {
         return { success: true };
     }
 
+    console.log('Login failed: Password mismatch or invalid user');
     // Failure: Record attempt for this IP
     // If they were locked but time passed, reset to 1. Otherwise increment.
     userAttempts.count = (userAttempts.count >= MAX_ATTEMPTS && (now - userAttempts.lastAttempt) >= LOCK_TIME)
