@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { hashPassword, createSession, getSession, deleteSession } from '@/lib/auth';
+import { hashPassword, verifyPassword, createSession, getSession, deleteSession } from '@/lib/auth';
 
 interface Contact {
     id: number;
@@ -53,7 +53,7 @@ export async function login(formData: FormData) {
     }
 
     // Success check
-    if (username === validUsername && hashPassword(password) === validHash) {
+    if (username === validUsername && validHash && verifyPassword(password, validHash)) {
         // Reset attempts for this IP on success
         delete attemptsData[ip];
         try { fs.writeFileSync(attemptsFilePath, JSON.stringify(attemptsData, null, 2)); } catch { }

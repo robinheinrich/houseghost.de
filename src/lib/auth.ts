@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
 
 const AUTH_COOKIE_NAME = 'houseghost_session';
@@ -13,7 +14,17 @@ function getSecretKey() {
 }
 
 export function hashPassword(password: string) {
-    return crypto.createHash('sha256').update(password).digest('hex');
+    const salt = bcrypt.genSaltSync(12);
+    return bcrypt.hashSync(password, salt);
+}
+
+export function verifyPassword(password: string, hash: string) {
+    try {
+        return bcrypt.compareSync(password, hash);
+    } catch (error) {
+        console.error('Password verification failed:', error);
+        return false;
+    }
 }
 
 /**
