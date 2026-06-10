@@ -30,11 +30,6 @@ const services = [
         title: "Event-Tontechnik",
         description: "Ausstattung kleinerer Events mit erstklassiger Tontechnik – kompakt und leistungsstark.",
         icon: "🔊"
-    },
-    {
-        title: "DJ Service",
-        description: "Professioneller DJ Service für exklusive Events. Die richtige Musik für Ihre Veranstaltung.",
-        icon: "🎧"
     }
 ];
 

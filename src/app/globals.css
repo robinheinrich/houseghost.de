@@ -3,6 +3,7 @@
 :root {
   --primary-light: #8ccde4;
   --primary-dark: #091430;
+  --primary-text-color: #70522c;
   --secondary-dark: #211d38;
   --accent-light: #d3d5ee;
   --bg-white: #fef9f3;
@@ -10,15 +11,17 @@
 
   --background: var(--bg-white);
   --foreground: var(--primary-dark);
+  --text-color: var(--primary-text-color);
 
-  --glass-bg: rgba(255, 255, 255, 0.2);
-  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-bg: rgba(255, 255, 255, 0.5);
+  --glass-border: rgba(255, 154, 16, 0.3);
   --glass-blur: 12px;
 }
 
 [data-theme='dark'] {
   --background: var(--primary-dark);
   --foreground: var(--bg-white);
+  --text-color: var(--accent-orange);
   --glass-bg: rgba(9, 20, 48, 0.4);
   --glass-border: rgba(140, 205, 228, 0.2);
 }
@@ -38,7 +41,7 @@ body {
   overflow-x: hidden;
   font-family: 'Outfit', sans-serif;
   background-color: var(--background);
-  color: var(--foreground);
+  color: var(--text-color);
   scroll-behavior: smooth;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -55,6 +58,7 @@ main {
 a {
   color: inherit;
   text-decoration: none;
+
 }
 
 .glass {
